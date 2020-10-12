@@ -1,0 +1,1 @@
+echo 00 00 00 00 00 00 00 17  67 77 66 6a 36 37 32 33 76 35 69 39 73 7a 79 61  3b 3b 72 65 61 64 79  | h2b | nc 78.128.216.92 20210 | ./the_connection/read | base64 -d  | rev | cut -c17- | h2b | strings
