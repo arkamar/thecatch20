@@ -8,7 +8,7 @@ https://www.thecatch.cz/
 	- [`FLAG{MXcz-PrQK-FJbJ-jWVA}` Easy Bee](#easy-bee)
 	- [`FLAG{YHsB-hr0J-W2ol-fV17}` Wiretaped Message`](#wiretaped-message)
 - [`FLAG{Jb91-XGSI-05xR-kqgQ}` Promotion](#promotion)
-	- [Malware spreading](#malware-spreading)
+	- [`FLAG{rUn5-GwMR-IlY6-orZd}` Malware spreading](#malware-spreading)
 	- [Attachment analysis](#attachment-analysis)
 	- [Downloaded File](#downloaded-file)
 	- [The Connection](#the-connection)
@@ -114,9 +114,83 @@ f.close()
 >
 > We suspect that the malware is primarily spreaded somehow by e-mail. We have partial traffic dump from one small company, that was attacked. Try to check this hypothesis.
 >
-> Use password `ThE-MaLWr-MaIlZZz-20` to download the evidence
+> Use password `ThE-MaLWr-MaIlZZz-20` to [download the evidence](malware_spreading/malware_spreading.zip)
 >
 > Good Luck!
+
+The pcap from given archive contains 4 tcp connections to imap server. There is an email with `<winning_numbers.zip>` attachment in **Alice** mail box.
+
+```
+Return-Path: <lorem@genuine-national-lottery.cz>
+X-Original-To: alice@cypherfix.cz
+Delivered-To: alice@cypherfix.cz
+Received: from mx.genuine-national-lottery.cz (mx.genuine-national-lottery.cz [203.0.113.150])
+	by mail.cypherfix.cz (Postfix) with ESMTP id 013DD60535
+	for <alice@cypherfix.cz>; Mon,  5 Oct 2020 22:01:09 +0200 (CEST)
+Received: from [203.0.113.92] (mail-sor-f41.google.com [mail-sor-f41.google.com]) 
+	by mx.genuine-national-lottery.cz (Postfix) with ESMTP id E4444821AA
+	for <alice@cypherfix.cz>; Mon,  5 Oct 2020 20:01:08 +0000 (UTC)
+Content-Type: multipart/mixed; boundary="===============2043998906902155698=="
+MIME-Version: 1.0
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-Id: <160192806888.20243.12819215096109337023@27f13e44ef5b>
+From: Lorem Ipsum <lorem@genuine-national-lottery.cz>
+To: Alice Nelson <alice@cypherfix.cz>
+Subject: The prediction
+Date: Mon,  5 Oct 2020 20:01:08 +0000 (UTC)
+
+--===============2043998906902155698==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+Dear Alice,
+I know it - you are the right person to cooperate. The numbers you are looking for, are in attachment. The password was send on your cell. Enjoy your (our) prize!
+
+Lorem
+--===============2043998906902155698==
+Content-Type: application/octet-stream
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=<winning_numbers.zip>
+
+UEsDBBQACQAIAIJYQVEJNsOIqEMAAPhTAAAaABwAbmF0aW9uX2xvdHRlcnlfbnVtYmVycy5vZHNV
+VAkAA4SbdV+Em3VfdXgLAAEEAAAAAATnAwAAyGLAGz7fLqYUdXMocddTUam0LApC2qdKxDQauLyH
+BICNYjxwXaRpajF37BmyLqE4m1vvi8ZfQJdFrX5IFDk/yoGhjOwmrTxVzf7K2F9pWZuDCRMw2b/W
+...
+AAD4UwAAGgAYAAAAAAAAAAAA+IEAAAAAbmF0aW9uX2xvdHRlcnlfbnVtYmVycy5vZHNVVAUAA4Sb
+dV91eAsAAQQAAAAABOcDAABQSwUGAAAAAAEAAQBgAAAADEQAAAAA
+
+--===============2043998906902155698==--
+```
+
+**Alice** than e-mailed to **John** about her struggle with the attachment, followed by secret password (`HappyWinner-paSSw00rd42`) necessary to open the attachment.
+
+```
+From: Alice Nelson <alice@cypherfix.cz>
+To: John Johnson <john@cypherfix.cz>
+Subject: Rich rich rich!
+
+Johnny, I need your help!
+I got the winning lottery numbers and we can be really rich :) But my computer is too slow or entro-something is wrong inside and it can't show me the numbers :(. I left a flash drive on your desk, run the only file that's there and gimme the results.
+Thanks and see ya!
+A.
+```
+
+```
+From: Alice Nelson <alice@cypherfix.cz>
+To: John Johnson <john@cypherfix.cz>
+Subject: Rich and stupid :)
+
+Oh my, you will need the secret 'HappyWinner-paSSw00rd42'. See ya! A.
+```
+
+We found `nation_lottery_numbers.ods` file in `<winning_numbers>.zip`. I run following commands to find the flag
+
+```sh
+7z x nation_lottery_numbers.ods
+find -type f | xargs grep -F 'FLAG{'
+```
 
 ### Attachment analysis
 
