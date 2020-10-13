@@ -39,7 +39,7 @@ def get_filenames(path):
     filenames = []
     for root, directories, files in walk(path):
         for name in files:
-            if name.split('.')[(-1)] not in ('mpeg', 'avi', 'mp4', 'dd'):
+            if name.split('.')[(-1)] not in ('mpeg', 'avi', 'mp4', 'dd') and '_README' not in name:
                 filenames.append('{}/{}'.format(root, name).replace('\\', '/'))
 
     filenames.sort()
@@ -60,6 +60,14 @@ def get_random_aes_key(length):
     key = bytearray(random.getrandbits(8) for _ in range(length))
     return key
 
+
+def aes_decrypt(data, aeskey):
+    """
+        Encrypt/decrypt data by provided AES key
+        """
+    aes = pyaes.AESModeOfOperationCTR(aeskey)
+    encdata = aes.decrypt(data)
+    return encdata
 
 def aes_encrypt(data, aeskey):
     """
@@ -93,18 +101,19 @@ def read_file(filename):
         Read content of file to variable
         """
     with open(filename, 'rb') as (fileh):
+        hdr = fileh.read(4)
+        key = fileh.read(256)
+        l = int.from_bytes(fileh.read(8), byteorder='big')
         data = fileh.read()
+        print(hdr, l, len(data))
     return data
 
 
-def write_file(filename, key, data, orig_len):
+def write_file(filename, data):
     """
         Write header + encrypted content to file
         """
     with open(filename, 'wb') as (fileh):
-        fileh.write(b'RV20')
-        fileh.write(key)
-        fileh.write(orig_len.to_bytes(8, byteorder='big'))
         fileh.write(data)
 
 
@@ -119,14 +128,17 @@ def main():
         for filename in filenames:
             print('  {}'.format(filename))
 
-    rsakey = read_rsakey(rsakeyfile)
+#    rsakey = read_rsakey(rsakeyfile)
     init_random(2020)
     for filename in filenames:
         aeskey = get_random_aes_key(32)
+        print('o{}'.format(filename))
+        print(len(aeskey))
         data = read_file(filename)
-        enc_data = aes_encrypt(data, aeskey)
-        enc_aeskey = rsa_encrypt(aeskey, rsakey)
-        write_file('{}'.format(filename), enc_aeskey, enc_data, len(data))
+        dec_data = aes_decrypt(data, aeskey)
+#        enc_aeskey = rsa_encrypt(aeskey, rsakey)
+#        print(len(enc_aeskey))
+        write_file('o{}'.format(filename), dec_data)
 
 
 main()
