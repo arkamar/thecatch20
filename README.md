@@ -20,7 +20,7 @@ https://www.thecatch.cz/
 >
 > Good luck!
 
-## Malicious e-mails
+### Malicious e-mails
 
 > Hi, junior investigator!
 >
@@ -42,7 +42,7 @@ every email contains http address and one of them contains the final flag.
 cat textfile* | grep -o 'http://[^ ]*' | xargs curl 2>/dev/null
 ```
 
-## Spam everywhere
+### Spam everywhere
 
 > Hi, junior investigator!
 >
@@ -56,7 +56,7 @@ The pcap in the archive contains 35 SMTP connections where everyone is used to s
 
 ![](spam_everywhere/rv20protector.png)
 
-## Easy Bee
+### Easy Bee
 
 > Hi, junior investigator!
 >
@@ -68,7 +68,7 @@ The pcap in the archive contains 35 SMTP connections where everyone is used to s
 
 The archive contains binary `easy_botnet_client.exe`. The simplest solution is to dump the network communication and inspect transfered data. The client connects to `78.128.216.92:20200` and sends the message `Easy-Bee-358n9pqh ready for work`. The server replies `Hello, your order is to keep in secret this flag: FLAG{MXcz-PrQK-FJbJ-jWVA}`.
 
-## Wiretaped message
+### Wiretaped message
 
 > Hi, junior investigator!
 >
