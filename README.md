@@ -4,6 +4,7 @@ https://www.thecatch.cz/
 
 - [`FLAG{a5AG-IVeK-jYvv-Brvq}` Intro](#intro)
 - [`FLAG{Tyqz-EgrI-8G7E-6PKB}` Malicious e-mails](#malicious-e-mails)
+- [`FLAG{SaXY-u8fc-p1Kv-oXoT}` Spam everywhere](#spam-everywhere)
 
 ## Intro
 
@@ -36,3 +37,17 @@ every email contains http address and one of them contains the final flag.
 ```sh
 cat textfile* | grep -o 'http://[^ ]*' | xargs curl 2>/dev/null
 ```
+
+## Spam everywhere
+
+> Hi, junior investigator!
+>
+> We get some recorded traffic, we believe you can analyze it and found whether it contains something malicious.
+>
+> Use password `sPaMMerS-wOrKS` to [download the evidence](spam_everywhere/spam_everywhere.zip)
+>
+> Good Luck!
+
+The pcap in the archive contains 35 SMTP connections where everyone is used to send exactly one email. Most of them are spam advertising **The Cure from RANSOMVID-20**. The flag is in the image.
+
+![](spam_everywhere/rv20protector.png)
