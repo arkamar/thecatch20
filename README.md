@@ -7,6 +7,8 @@ https://www.thecatch.cz/
 	- [`FLAG{SaXY-u8fc-p1Kv-oXoT}` Spam everywhere](#spam-everywhere)
 	- [`FLAG{MXcz-PrQK-FJbJ-jWVA}` Easy Bee](#easy-bee)
 	- [`FLAG{YHsB-hr0J-W2ol-fV17}` Wiretaped Message`](#wiretaped-message)
+- [`FLAG{Jb91-XGSI-05xR-kqgQ}` Promotion](#promotion)
+- [`FLAG{aKAL-qQhH-MsAz-miUG}` Epilogue](#epilogue)
 
 ## Intro
 
@@ -91,3 +93,23 @@ for i in range(31):
 
 f.close()
 ```
+
+## Promotion
+
+> Hi, junior investigator!
+>
+> You have successfully completed the training and earned the promotion to the **Executive Senior Investigator**. You are ready to get access to the malware research facility - just enter the code `FLAG{Jb91-XGSI-05xR-kqgQ}` and save the world from the RANSOMVID-20 imminent threat. Remember - many of our experienced investigators have been already digitally quarantined, so be careful!
+>
+> Good luck!
+
+## Epilogue
+
+> Hi, savior of the world!
+>
+> You have succesfully analyzed all aspects of the dreadful malware, which has threatened the Internet population. The digital quarantine can be now lifted and the happy users can return to their ordinary activities - especially to searching pictures and videos of fluffy cute kittens...
+>
+> We would like to ask you to fill short questionnaire - we need some information for eventual prize delivery.
+>
+> You can also enter the flag `FLAG{aKAL-qQhH-MsAz-miUG}` to set this challenge green :-)
+>
+> See you!
