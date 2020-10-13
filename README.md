@@ -8,6 +8,12 @@ https://www.thecatch.cz/
 	- [`FLAG{MXcz-PrQK-FJbJ-jWVA}` Easy Bee](#easy-bee)
 	- [`FLAG{YHsB-hr0J-W2ol-fV17}` Wiretaped Message`](#wiretaped-message)
 - [`FLAG{Jb91-XGSI-05xR-kqgQ}` Promotion](#promotion)
+	- [Malware spreading](#malware-spreading)
+	- [Attachment analysis](#attachment-analysis)
+	- [Downloaded File](#downloaded-file)
+	- [The Connection](#the-connection)
+	- [Botnet master](#botnet-master)
+	- [Ransomware](#ransomware)
 - [`FLAG{aKAL-qQhH-MsAz-miUG}` Epilogue](#epilogue)
 
 ## Intro
@@ -101,6 +107,70 @@ f.close()
 > You have successfully completed the training and earned the promotion to the **Executive Senior Investigator**. You are ready to get access to the malware research facility - just enter the code `FLAG{Jb91-XGSI-05xR-kqgQ}` and save the world from the RANSOMVID-20 imminent threat. Remember - many of our experienced investigators have been already digitally quarantined, so be careful!
 >
 > Good luck!
+
+### Malware spreading
+
+> Hi, executive senior investigator!
+>
+> We suspect that the malware is primarily spreaded somehow by e-mail. We have partial traffic dump from one small company, that was attacked. Try to check this hypothesis.
+>
+> Use password `ThE-MaLWr-MaIlZZz-20` to download the evidence
+>
+> Good Luck!
+
+### Attachment analysis
+
+> Hi, executive senior investigator!
+>
+> Well done, we have acquired the malicious mail attachment. Now, you should take a closer look on it and find out, how it works.
+>
+> Use password `ThE-aTTacHmEnt-20` to download the evidence
+>
+> Good Luck!
+
+### Downloaded file
+
+> Hi, executive senior investigator!
+>
+> The file, you have acquired in previous investigation is not the malware, we were looking for. The attacker probably replaced it to fool us. Fortunatelly, we have a traffic dump, where you can probably find the original file. Try to find it and do not forget to be sure it is the correct file.
+>
+> Use password `ThE-doWNloAdeD-fIlE-20` to download the evidence
+>
+> Good luck!
+
+### The Connection
+
+> Hi executive senior investigator!
+>
+> Cool, you have found the malware dropped on target computer. According to your defined procedure and your previously detected IoC (indicators of compromise), we were able to find other versions of malware in traffic dumps - we assume it is some kind of botnet client. Unfortunatelly, it looks like the C2 server has been meanwhile upgraded and although the server reacts to client's messages, the client can't decode the orders. You should investigate the communication.
+>
+> Use password `ThE-CaNDc-cONNecTiOn-20` to download the evidence
+>
+> Good luck!
+
+### Botnet master
+
+> Hi, executive senior investigator!
+>
+> We have managed to get a rare catch - a traffic dump of issuing commands for the C2 server by its master! Glory to the network specialists of unnamed company. Try to find out how this communication works.
+>
+> Use password `maSTeR-aND-coMMAndEr` to download the evidence
+>
+> Our network analytics report that one of currently online C2 servers can be found on IP `78.128.216.92` on `TCP/20220`.
+>
+> Good luck!
+
+### Ransomware
+
+> Hi, executive senior investigator!
+>
+> Finally, we have acquired the `RANSOMVID-20` encryption module. According to the information from our partners, it encrypts files on any drives, it can found. We have also one image of relatively small drive, which was affected by `RANSOMVID-20` only (no user or system action were undertaken). Try to find out how to decrypt the files without paying any single TCC.
+>
+> Use password `rAnSOmVID-20` to download the evidence
+>
+> Good luck!
+>
+> **WARNING: The ransomware executable is dangerous - virtual machine is strongly recommended for the analysis.**
 
 ## Epilogue
 
