@@ -6,6 +6,7 @@ https://www.thecatch.cz/
 	- [`FLAG{Tyqz-EgrI-8G7E-6PKB}` Malicious e-mails](#malicious-e-mails)
 	- [`FLAG{SaXY-u8fc-p1Kv-oXoT}` Spam everywhere](#spam-everywhere)
 	- [`FLAG{MXcz-PrQK-FJbJ-jWVA}` Easy Bee](#easy-bee)
+	- [`FLAG{YHsB-hr0J-W2ol-fV17}` Wiretaped Message`](#wiretaped-message)
 
 ## Intro
 
@@ -64,3 +65,29 @@ The pcap in the archive contains 35 SMTP connections where everyone is used to s
 > Good Luck!
 
 The archive contains binary `easy_botnet_client.exe`. The simplest solution is to dump the network communication and inspect transfered data. The client connects to `78.128.216.92:20200` and sends the message `Easy-Bee-358n9pqh ready for work`. The server replies `Hello, your order is to keep in secret this flag: FLAG{MXcz-PrQK-FJbJ-jWVA}`.
+
+## Wiretaped message
+
+> Hi, junior investigator!
+>
+> We have wiretaped strange communication - probably a message. Try to decode it.
+>
+> Use password `wiREtaPeD-msG` to [download the evidence](wiretaped_message/wiretaped_message.zip)
+>
+> Good Luck!
+
+Every message is encoded with 2 bytes for length of the message in big endian followed by data. Data are base64 encoded. I used following script to decode all data.
+
+```python
+import base64
+import sys
+
+f = open(sys.argv[1], 'rb')
+
+for i in range(31):
+	l = int.from_bytes(f.read(2), byteorder='big')
+	b64 = base64.b64decode(f.read(l)).decode()
+	print(l, b64)
+
+f.close()
+```
