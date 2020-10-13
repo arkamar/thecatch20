@@ -3,8 +3,9 @@
 https://www.thecatch.cz/
 
 - [`FLAG{a5AG-IVeK-jYvv-Brvq}` Intro](#intro)
-- [`FLAG{Tyqz-EgrI-8G7E-6PKB}` Malicious e-mails](#malicious-e-mails)
-- [`FLAG{SaXY-u8fc-p1Kv-oXoT}` Spam everywhere](#spam-everywhere)
+	- [`FLAG{Tyqz-EgrI-8G7E-6PKB}` Malicious e-mails](#malicious-e-mails)
+	- [`FLAG{SaXY-u8fc-p1Kv-oXoT}` Spam everywhere](#spam-everywhere)
+	- [`FLAG{MXcz-PrQK-FJbJ-jWVA}` Easy Bee](#easy-bee)
 
 ## Intro
 
@@ -51,3 +52,15 @@ cat textfile* | grep -o 'http://[^ ]*' | xargs curl 2>/dev/null
 The pcap in the archive contains 35 SMTP connections where everyone is used to send exactly one email. Most of them are spam advertising **The Cure from RANSOMVID-20**. The flag is in the image.
 
 ![](spam_everywhere/rv20protector.png)
+
+## Easy Bee
+
+> Hi, junior investigator!
+>
+> We have for you something malicious called "Easy Bee". We believe that you can analyze it and found what is its purpose.
+>
+> Use password `eAsY-beE-mAlWr-20` to [download the evidence](easy_bee/easy_bee.zip)
+>
+> Good Luck!
+
+The archive contains binary `easy_botnet_client.exe`. The simplest solution is to dump the network communication and inspect transfered data. The client connects to `78.128.216.92:20200` and sends the message `Easy-Bee-358n9pqh ready for work`. The server replies `Hello, your order is to keep in secret this flag: FLAG{MXcz-PrQK-FJbJ-jWVA}`.
