@@ -72,7 +72,7 @@ The pcap in the archive contains 35 SMTP connections where everyone is used to s
 >
 > Good Luck!
 
-The archive contains binary `easy_botnet_client.exe`. The simplest solution is to dump the network communication and inspect transfered data. The client connects to `78.128.216.92:20200` and sends the message `Easy-Bee-358n9pqh ready for work`. The server replies `Hello, your order is to keep in secret this flag: FLAG{MXcz-PrQK-FJbJ-jWVA}`.
+The archive contains binary `easy_botnet_client.exe`. The simplest solution is to dump the network communication and inspect transfered data (I run the binary in wine). The client connects to `78.128.216.92:20200` and sends the message `Easy-Bee-358n9pqh ready for work`. The server replies `Hello, your order is to keep in secret this flag: FLAG{MXcz-PrQK-FJbJ-jWVA}`.
 
 ### Wiretaped message
 
