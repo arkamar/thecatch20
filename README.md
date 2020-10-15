@@ -254,9 +254,31 @@ Physical Size = 36638
 >
 > The file, you have acquired in previous investigation is not the malware, we were looking for. The attacker probably replaced it to fool us. Fortunatelly, we have a traffic dump, where you can probably find the original file. Try to find it and do not forget to be sure it is the correct file.
 >
-> Use password `ThE-doWNloAdeD-fIlE-20` to download the evidence
+> Use password `ThE-doWNloAdeD-fIlE-20` to [download the evidence](downloaded_file/downloaded_file.zip)
 >
 > Good luck!
+
+- I filtered out all tcp/443, and udp connections
+- 198.51.100.150:80 -> 4 fake clients
+- 198.51.100.150:20101 -> the client
+- 78.128.216.92:20210 -> communication with cnc
+- run the client with -ip 78.128.216.92 --port 20210
+
+```
+GET /linux_core_update.bin HTTP/1.1
+User-Agent: Wget/1.20.1 (linux-gnu)
+Accept: */*
+Accept-Encoding: identity
+Host: challenges.thecatch.ex:20101
+```
+
+```
+GET /easybird_installer.bin HTTP/1.1
+User-Agent: CESNET (X11; Linux i686; rv:20.20) TC Browser/20.20
+Accept: */*
+Accept-Encoding: identity
+Host: challenges.thecatch.ex
+```
 
 ### The Connection
 
@@ -291,6 +313,8 @@ Physical Size = 36638
 > Good luck!
 >
 > **WARNING: The ransomware executable is dangerous - virtual machine is strongly recommended for the analysis.**
+
+https://github.com/extremecoders-re/pyinstxtractor
 
 ## Epilogue
 
