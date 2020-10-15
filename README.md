@@ -9,7 +9,7 @@ https://www.thecatch.cz/
 	- [`FLAG{YHsB-hr0J-W2ol-fV17}` Wiretaped Message`](#wiretaped-message)
 - [`FLAG{Jb91-XGSI-05xR-kqgQ}` Promotion](#promotion)
 	- [`FLAG{rUn5-GwMR-IlY6-orZd}` Malware spreading](#malware-spreading)
-	- [Attachment analysis](#attachment-analysis)
+	- [`FLAG{XRC9-XyEE-tlTV-nOl7}` Attachment analysis](#attachment-analysis)
 	- [Downloaded File](#downloaded-file)
 	- [The Connection](#the-connection)
 	- [Botnet master](#botnet-master)
@@ -198,9 +198,55 @@ find -type f | xargs grep -F 'FLAG{'
 >
 > Well done, we have acquired the malicious mail attachment. Now, you should take a closer look on it and find out, how it works.
 >
-> Use password `ThE-aTTacHmEnt-20` to download the evidence
+> Use password `ThE-aTTacHmEnt-20` to [download the evidence](attachment_analysis/attachment_analysis.zip)
 >
 > Good Luck!
+
+This archive contains another `nation_lottery_numbers.ods`. `ODS` file is basically zip archive full of XMLs.
+
+```
+$ 7z l nation_lottery_numbers.ods
+Path = nation_lottery_numbers.ods
+Type = zip
+Physical Size = 36638
+
+   Date      Time    Attr         Size   Compressed  Name
+	------------------- ----- ------------ ------------  ------------------------
+	2020-09-21 12:29:32 D....            0            0  Basic
+	2020-09-15 22:01:20 .....          338          211  Basic/script-lc.xml
+	2020-09-21 12:29:32 D....            0            0  Basic/Standard
+	2020-09-21 12:29:32 .....        35220        15431  Basic/Standard/Module1.xml
+	2020-09-15 22:01:20 .....          348          214  Basic/Standard/script-lb.xml
+	2020-09-21 12:29:32 D....            0            0  Configurations2
+	2020-09-15 22:01:20 D....            0            0  Configurations2/accelerator
+	2020-09-15 22:01:20 D....            0            0  Configurations2/floater
+	2020-09-21 12:29:32 D....            0            0  Configurations2/images
+	2020-09-15 22:01:20 D....            0            0  Configurations2/images/Bitmaps
+	2020-09-15 22:01:20 D....            0            0  Configurations2/menubar
+	2020-09-15 22:01:20 D....            0            0  Configurations2/popupmenu
+	2020-09-15 22:01:20 D....            0            0  Configurations2/progressbar
+	2020-09-15 22:01:20 D....            0            0  Configurations2/statusbar
+	2020-09-15 22:01:20 D....            0            0  Configurations2/toolbar
+	2020-09-15 22:01:20 D....            0            0  Configurations2/toolpanel
+	2020-09-15 22:01:20 .....        15020         2012  content.xml
+	2020-09-21 12:29:32 D....            0            0  Dialogs
+	2020-09-15 22:01:20 .....          338          211  Dialogs/dialog-lc.xml
+	2020-09-21 12:29:32 D....            0            0  Dialogs/Standard
+	2020-09-15 22:01:20 .....          348          213  Dialogs/Standard/dialog-lb.xml
+	2020-09-15 22:01:20 .....          796          363  Dialogs/Standard/Dialog1.xml
+	2020-09-15 22:01:20 .....          899          261  manifest.rdf
+	2020-09-21 12:29:32 D....            0            0  META-INF
+	2020-09-15 22:01:20 .....         1599          337  META-INF/manifest.xml
+	2020-09-15 22:01:20 .....          873          428  meta.xml
+	2020-09-15 22:01:20 .....           46           44  mimetype
+	2020-09-15 22:01:20 .....        29902         4794  settings.xml
+	2020-09-15 22:01:20 .....         9890         1700  styles.xml
+	2020-09-21 12:29:32 D....            0            0  Thumbnails
+	2020-09-15 22:01:20 .....         5270         5229  Thumbnails/thumbnail.png
+	------------------- ----- ------------ ------------  ------------------------
+	2020-09-21 12:29:32             100887        31448  14 files, 17 folders
+```
+`Basic/Standard/Module1.xml` holds the visuab basic script which is extracted to [`attachment_analysis/1.vb`](attachment_analysis/1.vb). I copied it to the [`attachment_analysis/1.py`](attachment_analysis/1.py), comment all lines and than I started slowly uncommenting and pythonifying them. I skipped parts which did not seem to be necessary for final result. The script prints out multiple addresses, where [`http://challenges.thecatch.cz:20101/FILORUX_update_OB127q45D.msi`](http://challenges.thecatch.cz:20101/FILORUX_update_OB127q45D.msi) points to the flag.
 
 ### Downloaded file
 
