@@ -290,6 +290,8 @@ Host: challenges.thecatch.ex
 >
 > Good luck!
 
+http://challenges.thecatch.cz:20102/ransomvid1984.bin
+
 ### Botnet master
 
 > Hi, executive senior investigator!
