@@ -258,7 +258,8 @@ Physical Size = 36638
 >
 > Good luck!
 
-- I filtered out all tcp/443, and udp connections
+The given pcap file from archive contains multiple connections. I filtered out all TCP/*:443 and UDP/*:53 which simplifies the ouput significantly.
+
 - 198.51.100.150:80 -> 4 fake clients
 - 198.51.100.150:20101 -> the client
 - 78.128.216.92:20210 -> communication with cnc
@@ -317,6 +318,7 @@ http://challenges.thecatch.cz:20102/ransomvid1984.bin
 > **WARNING: The ransomware executable is dangerous - virtual machine is strongly recommended for the analysis.**
 
 https://github.com/extremecoders-re/pyinstxtractor
+uncompyle6
 
 ## Epilogue
 
