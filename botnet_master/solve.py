@@ -53,6 +53,7 @@ for cmd in cmds:
     print(cmd)
     s.send(encode(cmd[0], cmd[1]))
     data = s.recv(BUFFER_SIZE)
+    data += s.recv(BUFFER_SIZE)
     print(decode(data))
 
 s.close()
