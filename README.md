@@ -13,7 +13,7 @@ https://www.thecatch.cz/
 	- [`FLAG{l03Y-BDjA-uB5v-PHVB}` Downloaded File](#downloaded-file)
 	- [`FLAG{kT0c-WTfc-S326-Jp1A}` The Connection](#the-connection)
 	- [`FLAG{uLHI-3Zq1-kOHx-FGR1}` Botnet master](#botnet-master)
-	- [Ransomware](#ransomware)
+	- [`FLAG{TMMW-rUaP-B2Ko-XejX}` Ransomware](#ransomware)
 - [`FLAG{aKAL-qQhH-MsAz-miUG}` Epilogue](#epilogue)
 
 ## Intro
@@ -416,8 +416,22 @@ Well, the flag is nicely hidden in between other clients. It really took me whil
 >
 > **WARNING: The ransomware executable is dangerous - virtual machine is strongly recommended for the analysis.**
 
-https://github.com/extremecoders-re/pyinstxtractor
-uncompyle6
+This one was the most exciting one. We have got `ransomvid_20.exe` binary and `image.dd` dump. We can notice that the binary was created with [PyInstaller](https://www.pyinstaller.org/) after inspection of strings in the binary. PyInstaller packs python applications into standalone executable. We need to reverse it and I found [PyInstaller Extractor](https://github.com/extremecoders-re/pyinstxtractor) which does exactly what we need, the collection of `pyc` python compiled byte code files. We can now decompile the bytecode. I used [uncompyle6](https://github.com/rocky/python-uncompyle6/) decompiler and the result is great, it is runnable without further modification (see [`ransomvid_20.py`](ransomware/ransomvid_20.py)).
+
+The problem of this ransomware is that it uses the same seed for pseudo-random generator to generate aes keys. Encrypted files has always same structure, starting with magic number `RV20`, followed by 256 bytes of RSA encrypted AES key, followed by 8 bytes of original length in big endian, followed by encrypted data. Fortunately, we do not need to decrypt the key. We have whole image and therefore we can reconstruct decryption of files in the same order as encryption was done, which allows us to generate AES keys, without having the RSA private key.
+
+I basically changed the original file to a decryptor, see [`deransomvid_20.py`](ransomware/deransomvid_20.py). The script accepts `--path <path>` of mounted image and produces decrypted copy to to `o<path>`. The `--keyfile` is still mandatory but could be anything, because it is not used at all. The `o<path>` must contain original directory structure. Those are painfalls of this script.
+
+```
+mkdir img
+sudo mount -o loop,ro,noexec,nodev,nosuid image.dd img
+mkdir -p oimg/{c.a.t.-backup,flags,private}
+python3 deransomvid_20.py -p img -k -
+```
+And the last command gives the flag
+```
+head -n 35 oimg/private/iustum.txt | tail -n25 | xargs printf '%c'
+```
 
 ## Epilogue
 
