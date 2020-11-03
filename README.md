@@ -42,7 +42,7 @@ There is bunch of emails in the archive. I extracted them with `ripmime`
 ls *.eml | xargs -n1 ripmime -i
 ```
 
-every email contains http address and one of them contains the final flag.
+every email contains http address and [one of them](http://challenges.thecatch.cz:20100/npelfsd0btmaovy2) contains the final flag.
 
 ```sh
 cat textfile* | grep -o 'http://[^ ]*' | xargs curl 2>/dev/null
@@ -58,7 +58,7 @@ cat textfile* | grep -o 'http://[^ ]*' | xargs curl 2>/dev/null
 >
 > Good Luck!
 
-The pcap in the archive contains 35 SMTP connections where everyone is used to send exactly one email. Most of them are spam advertising **The Cure from RANSOMVID-20**. The flag is in the image.
+The pcap in the archive contains 35 SMTP connections, where everyone is used to send exactly one email. Most of them are spam advertising **The Cure from RANSOMVID-20**. The flag is in the image.
 
 ![](spam_everywhere/rv20protector.png)
 
