@@ -10,7 +10,7 @@ https://www.thecatch.cz/
 - [`FLAG{Jb91-XGSI-05xR-kqgQ}` Promotion](#promotion)
 	- [`FLAG{rUn5-GwMR-IlY6-orZd}` Malware spreading](#malware-spreading)
 	- [`FLAG{XRC9-XyEE-tlTV-nOl7}` Attachment analysis](#attachment-analysis)
-	- [Downloaded File](#downloaded-file)
+	- [`FLAG{l03Y-BDjA-uB5v-PHVB}` Downloaded File](#downloaded-file)
 	- [The Connection](#the-connection)
 	- [Botnet master](#botnet-master)
 	- [Ransomware](#ransomware)
@@ -246,7 +246,7 @@ Physical Size = 36638
 	------------------- ----- ------------ ------------  ------------------------
 	2020-09-21 12:29:32             100887        31448  14 files, 17 folders
 ```
-`Basic/Standard/Module1.xml` holds the visuab basic script which is extracted to [`attachment_analysis/1.vb`](attachment_analysis/1.vb). I copied it to the [`attachment_analysis/1.py`](attachment_analysis/1.py), comment all lines and than I started slowly uncommenting and pythonifying them. I skipped parts which did not seem to be necessary for final result. The script prints out multiple addresses, where [`http://challenges.thecatch.cz:20101/FILORUX_update_OB127q45D.msi`](http://challenges.thecatch.cz:20101/FILORUX_update_OB127q45D.msi) points to the flag.
+`Basic/Standard/Module1.xml` holds the visuab basic script which is extracted to [`attachment_analysis/1.vb`](attachment_analysis/1.vb). I copied it to the [`attachment_analysis/1.py`](attachment_analysis/1.py), commented all lines and than I started slowly uncommenting and pythonifying them. I skipped parts which did not seem to be necessary for final result. The script prints out multiple addresses, where [`http://challenges.thecatch.cz:20101/FILORUX_update_OB127q45D.msi`](http://challenges.thecatch.cz:20101/FILORUX_update_OB127q45D.msi) points to the flag.
 
 ### Downloaded file
 
@@ -258,28 +258,40 @@ Physical Size = 36638
 >
 > Good luck!
 
-The given pcap file from archive contains multiple connections. I filtered out all TCP/*:443 and UDP/*:53 which simplifies the ouput significantly.
+The given pcap file from archive contains multiple connections. I filtered out all TCP/*:443 and UDP/*:53 which simplified the output significantly. In remaining connections we can see:
 
-- 198.51.100.150:80 -> 4 fake clients
-- 198.51.100.150:20101 -> the client
+- 94.23.180.49:80 -> online casino browsing
+- 198.51.100.150:80 -> 4 fake client elf files
+- 198.51.100.150:20101 -> The original client elf file
 - 78.128.216.92:20210 -> communication with cnc
-- run the client with -ip 78.128.216.92 --port 20210
 
+Fake clients just print out `Connection failed, try again` after 5 seconds.
+The original client prints out following message, when we run it without parameters:
 ```
-GET /linux_core_update.bin HTTP/1.1
-User-Agent: Wget/1.20.1 (linux-gnu)
-Accept: */*
-Accept-Encoding: identity
-Host: challenges.thecatch.ex:20101
+usage: client [-h] -ip IPADDRESS -p PORT
+client: error: the following arguments are required: -ip/--ipaddress, -p/--port
 ```
+But we have found messages from communication with cnc server
+```
+00000000  00 00 00 00 00 00 00 1f  68 6a 68 61 76 68 35 72  |........hjhavh5r|
+00000010  6c 62 62 37 78 72 69 61  20 72 65 61 64 79 20 66  |lbb7xria ready f|
+00000020  6f 72 20 77 6f 72 6b 00  00 00 00 00 00 00 04 31  |or work........1|
+00000030  28 35 29                                          |(5)|
+00000033
+```
+So, let's try to run it with cnc ip address and port
+```
+./client -ip 78.128.216.92 --port 20210
+```
+Hurray, we have a Flag.
 
+Anyway, I tried to decompile binaries and fake client has basically just this functionality (complete script is [here](downloaded_file/fake_client.py))
+```python
+    outtext = 'Connection failed, try again  '
+    sleep(5)
+    print('{}'.format(outtext))
 ```
-GET /easybird_installer.bin HTTP/1.1
-User-Agent: CESNET (X11; Linux i686; rv:20.20) TC Browser/20.20
-Accept: */*
-Accept-Encoding: identity
-Host: challenges.thecatch.ex
-```
+The original client does not connect anywhere as well. It contains the flag encrypted with AES, where IP address and port are used to construct the decryption key. You could see decompiled script [here](downloaded_file/downloaded_client.py).
 
 ### The Connection
 
